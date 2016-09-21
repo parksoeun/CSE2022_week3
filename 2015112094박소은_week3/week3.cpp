@@ -16,6 +16,7 @@ const int height = 480;
 
 float* pixels = new float[width*height * 3];
 
+//점을 찍는 함수
 void drawPixel(const int& i, const int& j, const float& red, const float& green, const float& blue)
 {
 	pixels[(i + width* j) * 3 + 0] = red;
@@ -25,13 +26,16 @@ void drawPixel(const int& i, const int& j, const float& red, const float& green,
 
 // scratched from https://courses.engr.illinois.edu/ece390/archive/archive-f2000/mp/mp4/anti.html
 // see 'Rasterization' part.
+
+//두 점을 잇는 직선을 그리는 함수
 void drawLine(const int& i0, const int& j0, const int& i1, const int& j1, const float& red, const float& green, const float& blue)
 {
-	if (i0 == i1) {
+	if (i0 == i1) { //반복문 안에서 두 점의 x좌표가 같을 시 분모가 0이 되어 에러가 나는 것을 예방하기 위함
 		for (int j = j0; j < j1; j++)
 			drawPixel(i0, j, red, green, blue);
 		return;
 	}
+
 	for (int i = i0; i <= i1; i++)
 	{
 		const int j = (j1 - j0)*(i - i0) / (i1 - i0) + j0;
@@ -40,13 +44,14 @@ void drawLine(const int& i0, const int& j0, const int& i1, const int& j1, const 
 	}
 }
 
+//원을 그리기 위한 함수 (i0,j0 = 원의 중심 좌표)
 void drawCircle(const int& i0, const int& j0, const float& red, const float& green, const float& blue) {
-	int r = 50;
+	int r = 50; //원의 반지름
 	for (int i = i0 - r;i < i0 + r;i++) {
 		for (int j = j0 - r;j < j0 + r;j++) {
 			int n = ((i - i0)*(i - i0) + (j - j0)*(j - j0) - r*r);
 			int m = ((i - i0)*(i - i0) + (j - j0)*(j - j0) - (r - 1)*(r - 1));
-			if (n < 0 && m>0)
+			if (n < 0 && m>0) //두 원의 사이
 				drawPixel(i, j, 0.0f, 0.0f, 0.0f);
 		}
 	}
@@ -76,7 +81,7 @@ void drawOnPixelBuffer()
 	drawLine(400, 50, 400, 150, 0.0f, 0.0f, 0.0f);
 
 	//색칠된 사각형
-	for (int k = 0; k < 100; k++)
+	for (int k = 0; k < 100; k++) //직선을 촘촘히 여러개 그려서 색칠
 		drawLine(100, 50 + k, 200, 50 + k, 0.0f, 0.0f, 0.0f);
 
 	//두꺼운 선
@@ -86,9 +91,9 @@ void drawOnPixelBuffer()
 
 	//삼각형
 	drawLine(500, 50, 600, 50, 0.0f, 0.0f, 0.0f);
-	for (int m = 0;m<2;m++)
+	for (int m = 0;m<2;m++) //사선의 경우 선이 점선이되어 테두리를 더 찐하게 하기 위하여 반복문 사용
 		drawLine(500, 50 + m, 550, 150 + m, 0.0f, 0.0f, 0.0f);
-	for (int n = 0;n<2;n++)
+	for (int n = 0;n<2;n++) //테두리를 더 찐하게 하기 위하여 반복문 사용
 		drawLine(550, 150 + n, 600, 50 + n, 0.0f, 0.0f, 0.0f);
 
 	//오각형
@@ -99,7 +104,7 @@ void drawOnPixelBuffer()
 	drawLine(300, 250, 325, 200, 0.0f, 0.0f, 0.0f);
 
 	//원
-	drawCircle(550, 250, 0.0f, 0.0f, 0.0f);
+	drawCircle(550, 250, 0.0f, 0.0f, 0.0f); //원의 중심을 입력하고 원을 그리는 함수 호출
 
 
 
